@@ -14,11 +14,11 @@
 
     -- дата рождения (после отчества)
     ALTER TABLE `salesmen` ADD COLUMN `dbirth` DATE NOT NULL AFTER `fathername`;
-    update `salesmen` set `dbirth` = '22.04.1970' where `id` =1; 
-    update `salesmen` set `dbirth` = '11.10.1973' where `id` =2; 
-    update `salesmen` set `dbirth` = '12.09.1978' where `id` =3; 
-    update `salesmen` set `dbirth` = '01.06.1982' where `id` =4; 
-    update `salesmen` set `dbirth` = '24.10.1984' where `id` =5; 
+    update `salesmen` set `dbirth` = '1970-04-22' where `id` =1; 
+    update `salesmen` set `dbirth` = '1973-10-11' where `id` =2; 
+    update `salesmen` set `dbirth` = '1978-09-12' where `id` =3; 
+    update `salesmen` set `dbirth` = '1982-06-01' where `id` =4; 
+    update `salesmen` set `dbirth` = '1984-10-24' where `id` =5; 
 
     -- ИНН (после даты рождения)    
     ALTER TABLE `salesmen` ADD COLUMN `inn` VARCHAR(20)  AFTER `dbirth` ;
