@@ -108,6 +108,10 @@ delimiter //
 create procedure `getProd`( product_name varchar(30), period int)
 
 begin
+    
+    if period is NULL then 
+        set period = 30;
+    end if;
 
     select sm.name, sm.surname, s.date
     from sales as s, salesmen as sm, products as p
@@ -121,47 +125,35 @@ begin
 end //
 delimiter ;
 
-call getProd('basketball ball', 35);
+call getProd('basketball ball', null);
 
 -- Процедура, выводящая сведения о несоответствии цены в журнале продаж 
 -- заявленной цене самого товара с учетом времени последнего изменения цены 
 -- (если изменение цены произошло позднее даты продажи, такие данные не учитывать). 
 -- Если таких случаев не обнаружено, процедура должна выводить сообщение об этом.
-
-
 drop procedure if exists `getOddPrice`;
-drop function if exists `isPriceChange`;
-
-delimiter //
-create function `isPriceChange`()
-return INT
-BEGIN
-        DECLARE c INT;
-        set c as (
-            select count(p.id)
-            from products as p, sales as s
-            where p.id = s.product_id
-            and s.price != s.price );
-        RETURN c;
-END //
-delimiter ;
 
 delimiter // 
 create procedure `getOddPrice`()
 BEGIN
 
-    if `isPriceChange`() then 
-        select p.name, p.pprice, s.price, p.price
+    if (
+        select count(p.id)
         from products as p, sales as s
         where p.id = s.product_id
-        and s.price != s.price
-        order by id;
+        and s.price != p.price
+        )
+        then 
+
+        select p.name, s.price, p.price, s.date
+        from products as p, sales as s
+        where p.id = s.product_id
+        and s.price != p.price;
     else 
         select "there's no such thing";
-    endif;
+    end if;
 
 END //
 delimiter ;
 
 call getOddPrice();
-
