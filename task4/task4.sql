@@ -29,9 +29,12 @@ BEGIN
     SET old_price = OLD.`price`;
     SET new_price = NEW.`price`;
 
-    INSERT INTO `price_update` 
-    (`product_id`, `date`, `old_price`, `new_price`)
-    VALUES (id, dt, old_price, new_price);
+    if old_price != new_price then
+
+        INSERT INTO `price_update` 
+        (`product_id`, `date`, `old_price`, `new_price`)
+        VALUES (id, dt, old_price, new_price);
+    end if;
 
 END //
 DELIMITER ;
